@@ -13,16 +13,15 @@
               Selected: <strong>{{ selectedCountryFullName }}</strong>
             </div>
           </b-col>
-          <!-- <b-col md="6">
+          <b-col md="6">
             <b-form-select
-              v-model="selectedCountryByCode"
-              @change="HandleSelectedCountry"
-              :options="options"
+              v-model="selectedCity"
+              :options="citiesForGivenCountry"
             ></b-form-select>
             <div class="mt-3">
-              Selected: <strong>{{ selectedCountryFullName }}</strong>
+              Selected: <strong>{{ selectedCity }}</strong>
             </div>
-          </b-col> -->
+          </b-col>
         </b-row>
       </b-col>
     </b-row>
@@ -30,22 +29,42 @@
 </template>
 
 <script>
-import * as countries from "../helpers/countries";
-
+import * as data from "../helpers/countries";
+import cities from "../helpers/cities.json";
 export default {
+  citiesJson: cities,
   data() {
     return {
       selectedCountryByCode: "MA",
       selectedCountryFullName: "",
-      options: countries.countries,
+      selectedCity: "",
+      options: data.countries,
+      citiesForGivenCountry: [],
     };
   },
   created() {
-    console.log(this.GetCountryFullNameByCode);
+    this.selectedCountryFullName = this.GetCountryFullNameByCode;
+    this.loadCities();
   },
   methods: {
     HandleSelectedCountry() {
       this.selectedCountryFullName = this.GetCountryFullNameByCode;
+      this.citiesForGivenCountry = this.$options.citiesJson.filter(
+        (countryObject) =>
+          countryObject.country === this.selectedCountryFullName
+      );
+      this.loadCities();
+    },
+    loadCities() {
+      // console.log(this.loadCitiesForGivenCountry);
+      this.citiesForGivenCountry = [];
+      this.loadCitiesForGivenCountry.forEach((city) => {
+        this.citiesForGivenCountry.push({
+          text: city.name,
+          value: city.name,
+        });
+      });
+      this.selectedCity = this.citiesForGivenCountry[1].value;
     },
   },
   computed: {
@@ -53,6 +72,11 @@ export default {
       return this.options.find(
         (country) => country.value == this.selectedCountryByCode
       ).text;
+    },
+    loadCitiesForGivenCountry() {
+      return this.$options.citiesJson.filter(
+        (obj) => obj.country === this.selectedCountryFullName
+      );
     },
   },
 };
