@@ -1,13 +1,31 @@
 <template>
   <b-container class="bv-example-row">
-    <b-form-select
-      v-model="selectedCountryByCode"
-      @change="HandleSelectedCountry"
-      :options="options"
-    ></b-form-select>
-    <div class="mt-3">
-      Selected: <strong>{{ selectedCountryFullName }}</strong>
-    </div>
+    <b-row>
+      <b-col md="6" offset-md="3">
+        <b-row>
+          <b-col md="6">
+            <b-form-select
+              v-model="selectedCountryByCode"
+              @change="HandleSelectedCountry"
+              :options="options"
+            ></b-form-select>
+            <div class="mt-3">
+              Selected: <strong>{{ selectedCountryFullName }}</strong>
+            </div>
+          </b-col>
+          <!-- <b-col md="6">
+            <b-form-select
+              v-model="selectedCountryByCode"
+              @change="HandleSelectedCountry"
+              :options="options"
+            ></b-form-select>
+            <div class="mt-3">
+              Selected: <strong>{{ selectedCountryFullName }}</strong>
+            </div>
+          </b-col> -->
+        </b-row>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
