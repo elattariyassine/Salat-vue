@@ -9,18 +9,18 @@
               @change="HandleSelectedCountry"
               :options="options"
             ></b-form-select>
-            <div class="mt-3">
-              Selected: <strong>{{ selectedCountryFullName }}</strong>
-            </div>
           </b-col>
           <b-col md="6">
             <b-form-select
               v-model="selectedCity"
               :options="citiesForGivenCountry"
             ></b-form-select>
-            <div class="mt-3">
-              Selected: <strong>{{ selectedCity }}</strong>
-            </div>
+          </b-col>
+        </b-row>
+        <hr />
+        <b-row>
+          <b-col>
+            <Prayers :country="selectedCountryFullName" :city="selectedCity" />
           </b-col>
         </b-row>
       </b-col>
@@ -31,7 +31,12 @@
 <script>
 import * as data from "../helpers/countries";
 import cities from "../helpers/cities.json";
+import Prayers from "./Prayers";
+
 export default {
+  components: {
+    Prayers,
+  },
   citiesJson: cities,
   data() {
     return {
