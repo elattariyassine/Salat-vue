@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-skeleton-table
-      :rows="5"
+      :rows="6"
       :columns="2"
       :table-props="{ bordered: true, striped: true }"
       v-if="isLoading"
@@ -80,19 +80,32 @@ export default {
     };
   },
   created() {
-    axios
-      .get(
-        `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${this.city}&country=${this.country}&method=8`
-      )
-      .then((res) => {
-        this.prayers.fajr = res["data"]["data"]["timings"].Fajr;
-        this.prayers.sunrise = res["data"]["data"]["timings"].Sunrise;
-        this.prayers.duhr = res["data"]["data"]["timings"].Dhuhr;
-        this.prayers.asr = res["data"]["data"]["timings"].Asr;
-        this.prayers.maghrib = res["data"]["data"]["timings"].Maghrib;
-        this.prayers.isha = res["data"]["data"]["timings"].Isha;
-      })
-      .catch();
+    this.fetchData(this.city, this.country);
+  },
+  methods: {
+    fetchData(city, country) {
+      console.log("inside ethcing data;..");
+      this.isLoading = true;
+      axios
+        .get(
+          `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${city}&country=${country}&method=8`
+        )
+        .then((res) => {
+          this.prayers.fajr = res["data"]["data"]["timings"].Fajr;
+          this.prayers.sunrise = res["data"]["data"]["timings"].Sunrise;
+          this.prayers.duhr = res["data"]["data"]["timings"].Dhuhr;
+          this.prayers.asr = res["data"]["data"]["timings"].Asr;
+          this.prayers.maghrib = res["data"]["data"]["timings"].Maghrib;
+          this.prayers.isha = res["data"]["data"]["timings"].Isha;
+          this.isLoading = false;
+        })
+        .catch();
+    },
+  },
+  watch: {
+    city(newCity) {
+      this.fetchData(newCity, this.city);
+    },
   },
 };
 </script>

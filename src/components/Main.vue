@@ -12,6 +12,7 @@
           </b-col>
           <b-col md="6">
             <b-form-select
+              @change="HandleCity"
               v-model="selectedCity"
               :options="citiesForGivenCountry"
             ></b-form-select>
@@ -70,6 +71,9 @@ export default {
         });
       });
       this.selectedCity = this.citiesForGivenCountry[1].value;
+    },
+    HandleCity(city) {
+      this.selectedCity = city;
     },
   },
   computed: {
