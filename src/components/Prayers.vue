@@ -19,15 +19,6 @@
         <span class="mr-auto">Al-fajr</span>
         <h2>{{ prayers.fajr }}</h2>
       </b-list-group-item>
-      <b-list-group-item class="d-flex align-items-center">
-        <b-avatar
-          variant="info"
-          icon="brightness-alt-high-fill"
-          class="mr-3"
-        ></b-avatar>
-        <span class="mr-auto">Sunrise</span>
-        <h2>{{ prayers.sunrise }}</h2>
-      </b-list-group-item>
       <b-list-group-item
         :variant="nextPrayer === 'Dhuhr' ? 'dark' : ''"
         class="d-flex align-items-center"
@@ -81,7 +72,6 @@ export default {
       isLoading: false,
       prayers: {
         fajr: "",
-        sunrise: "",
         duhr: "",
         asr: "",
         maghrib: "",
@@ -102,10 +92,10 @@ export default {
           `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${city}&country=${country}&method=8`
         )
         .then((res) => {
-          this.$emit("apiResponse", res);
+          console.log(this.nextPrayer + "H§§§§§§§§§§§§§§§§§§§§§§§§§§§§§!!");
           this.getTodaysPrayerTimes({ ...res });
+          this.$emit("apiResponse", res, this.isLoading, this.nextPrayer);
           this.prayers.fajr = res["data"]["data"]["timings"].Fajr;
-          this.prayers.sunrise = res["data"]["data"]["timings"].Sunrise;
           this.prayers.duhr = res["data"]["data"]["timings"].Dhuhr;
           this.prayers.asr = res["data"]["data"]["timings"].Asr;
           this.prayers.maghrib = res["data"]["data"]["timings"].Maghrib;
@@ -141,7 +131,7 @@ export default {
       const nextPrayers = [];
       timingsTolistOrdered.forEach((el) => {
         const [hours, minute] = el.time.split(":");
-        // console.log(hours, minute);
+        console.log(hours, minute);
         if (
           new Date().getHours() <= parseInt(hours) &&
           new Date().getMinutes() <= parseInt(minute)
@@ -151,6 +141,9 @@ export default {
         }
       });
       this.nextPrayer = nextPrayers[0];
+      if (nextPrayers[0] == undefined) {
+        this.nextPrayer = "Fajr";
+      }
     },
   },
   watch: {

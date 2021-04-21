@@ -1,12 +1,6 @@
 <template>
   <b-container class="bv-example-row">
     <b-row>
-      <b-col md="4" offset="4">
-        <b-badge variant="info">{{ hijriDate }}</b-badge>
-      </b-col>
-    </b-row>
-    <hr />
-    <b-row>
       <b-col md="6" offset-md="3">
         <b-row>
           <b-col md="6">
@@ -24,6 +18,26 @@
             ></b-form-select>
           </b-col>
         </b-row>
+        <hr />
+        <b-skeleton
+          v-if="!isLoading"
+          animation="wave"
+          height="2.5rem"
+          width="100%"
+        ></b-skeleton>
+        <!-- </b-card> -->
+        <b-alert show variant="info"
+          >{{ hijriDate }} -
+          <h5>
+            <b-badge
+              v-b-tooltip.hover
+              title="Next prayer is also shown as the active item in the list below"
+              variant="warning"
+              >Next Prayer is {{ nextPrayer }}
+            </b-badge>
+          </h5>
+        </b-alert>
+        <!-- </b-row> -->
         <hr />
         <RetryAlert :retry="retryRequest" />
         <b-row>
@@ -62,6 +76,8 @@ export default {
       citiesForGivenCountry: [],
       retryRequest: false,
       hijriDate: "",
+      isLoading: false,
+      nextPrayer: "",
     };
   },
   created() {
@@ -94,11 +110,15 @@ export default {
       console.log("this is error in parent " + error);
       this.retryRequest = !this.retryRequest;
     },
-    loadApiResponseFromChild(response) {
-      this.hijriDate =
-        response["data"]["data"]["date"]["hijri"].date +
-        " - " +
-        response["data"]["data"]["date"]["hijri"].month.en;
+    loadApiResponseFromChild(response, isLoading, nextPrayer) {
+      this.hijriDate = `${response["data"]["data"]["date"]["gregorian"]["weekday"].en}, ${response["data"]["data"]["date"]["hijri"].day} ${response["data"]["data"]["date"]["hijri"].month.en} ${response["data"]["data"]["date"]["hijri"].year}, ${response["data"]["data"]["date"].readable}`;
+      this.isLoading = isLoading;
+      this.nextPrayer = nextPrayer;
+      // console.log("==== " + res);
+      // this.hijriDate =
+      //   response["data"]["data"]["date"]["hijri"].date +
+      //   " - " +
+      //   response["data"]["data"]["date"]["hijri"].month.en;
     },
   },
   computed: {
