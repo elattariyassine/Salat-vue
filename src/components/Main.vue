@@ -19,9 +19,14 @@
           </b-col>
         </b-row>
         <hr />
+        <RetryAlert :retry="retryRequest" />
         <b-row>
           <b-col>
-            <Prayers :country="selectedCountryFullName" :city="selectedCity" />
+            <Prayers
+              @failedFetching="retryFetching"
+              :country="selectedCountryFullName"
+              :city="selectedCity"
+            />
           </b-col>
         </b-row>
       </b-col>
@@ -33,10 +38,12 @@
 import * as data from "../helpers/countries";
 import cities from "../helpers/cities.json";
 import Prayers from "./Prayers";
+import RetryAlert from "./Alert";
 
 export default {
   components: {
     Prayers,
+    RetryAlert,
   },
   citiesJson: cities,
   data() {
@@ -46,6 +53,7 @@ export default {
       selectedCity: "",
       options: data.countries,
       citiesForGivenCountry: [],
+      retryRequest: false,
     };
   },
   created() {
@@ -62,7 +70,6 @@ export default {
       this.loadCities();
     },
     loadCities() {
-      // console.log(this.loadCitiesForGivenCountry);
       this.citiesForGivenCountry = [];
       this.loadCitiesForGivenCountry.forEach((city) => {
         this.citiesForGivenCountry.push({
@@ -74,6 +81,10 @@ export default {
     },
     HandleCity(city) {
       this.selectedCity = city;
+    },
+    retryFetching(error) {
+      console.log("this is error in parent " + error);
+      this.retryRequest = !this.retryRequest;
     },
   },
   computed: {

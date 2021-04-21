@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     fetchData(city, country) {
-      console.log("inside ethcing data;..");
+      console.log("trying 1 it might work...");
       this.isLoading = true;
       axios
         .get(
@@ -99,7 +99,14 @@ export default {
           this.prayers.isha = res["data"]["data"]["timings"].Isha;
           this.isLoading = false;
         })
-        .catch();
+        .catch((err) => {
+          console.log(err);
+          this.$emit("failedFetching", err);
+          setTimeout(() => {
+            this.$emit("failedFetching", err);
+            this.fetchData(this.city, this.country);
+          }, 5000);
+        });
     },
   },
   watch: {
