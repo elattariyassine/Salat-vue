@@ -27,7 +27,7 @@ export default {
   props: ["retry"],
   data() {
     return {
-      dismissSecs: 3,
+      dismissSecs: 5,
       dismissCountDown: 0,
       showDismissibleAlert: false,
     };

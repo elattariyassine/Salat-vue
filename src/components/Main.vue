@@ -1,6 +1,12 @@
 <template>
   <b-container class="bv-example-row">
     <b-row>
+      <b-col md="4" offset="4">
+        <b-badge variant="info">{{ hijriDate }}</b-badge>
+      </b-col>
+    </b-row>
+    <hr />
+    <b-row>
       <b-col md="6" offset-md="3">
         <b-row>
           <b-col md="6">
@@ -24,6 +30,7 @@
           <b-col>
             <Prayers
               @failedFetching="retryFetching"
+              @apiResponse="loadApiResponseFromChild"
               :country="selectedCountryFullName"
               :city="selectedCity"
             />
@@ -54,6 +61,7 @@ export default {
       options: data.countries,
       citiesForGivenCountry: [],
       retryRequest: false,
+      hijriDate: "",
     };
   },
   created() {
@@ -85,6 +93,12 @@ export default {
     retryFetching(error) {
       console.log("this is error in parent " + error);
       this.retryRequest = !this.retryRequest;
+    },
+    loadApiResponseFromChild(response) {
+      this.hijriDate =
+        response["data"]["data"]["date"]["hijri"].date +
+        " - " +
+        response["data"]["data"]["date"]["hijri"].month.en;
     },
   },
   computed: {

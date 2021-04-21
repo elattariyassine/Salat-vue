@@ -7,9 +7,12 @@
       v-if="isLoading"
     ></b-skeleton-table>
     <b-list-group v-if="!isLoading">
-      <b-list-group-item class="d-flex align-items-center">
+      <b-list-group-item
+        :variant="nextPrayer === 'Fajr' ? 'dark' : ''"
+        class="d-flex align-items-center"
+      >
         <b-avatar
-          variant="success"
+          variant="info"
           icon="brightness-alt-high"
           class="mr-3"
         ></b-avatar>
@@ -18,40 +21,47 @@
       </b-list-group-item>
       <b-list-group-item class="d-flex align-items-center">
         <b-avatar
-          variant="success"
+          variant="info"
           icon="brightness-alt-high-fill"
           class="mr-3"
         ></b-avatar>
         <span class="mr-auto">Sunrise</span>
         <h2>{{ prayers.sunrise }}</h2>
       </b-list-group-item>
-      <b-list-group-item class="d-flex align-items-center">
-        <b-avatar
-          variant="success"
-          icon="brightness-high"
-          class="mr-3"
-        ></b-avatar>
+      <b-list-group-item
+        :variant="nextPrayer === 'Dhuhr' ? 'dark' : ''"
+        class="d-flex align-items-center"
+      >
+        <b-avatar variant="info" icon="brightness-high" class="mr-3"></b-avatar>
         <span class="mr-auto">Al-zuhr</span>
         <h2>{{ prayers.duhr }}</h2>
       </b-list-group-item>
-      <b-list-group-item class="d-flex align-items-center">
-        <b-avatar variant="success" icon="brightness-low" class="mr-3">
-        </b-avatar>
+      <b-list-group-item
+        :variant="nextPrayer === 'Asr' ? 'dark' : ''"
+        class="d-flex align-items-center"
+      >
+        <b-avatar variant="info" icon="brightness-low" class="mr-3"> </b-avatar>
         <span class="mr-auto">Al-'asr</span>
         <h2>{{ prayers.asr }}</h2>
       </b-list-group-item>
-      <b-list-group-item class="d-flex align-items-center">
+      <b-list-group-item
+        :variant="nextPrayer === 'Maghrib' ? 'dark' : ''"
+        class="d-flex align-items-center"
+      >
         <b-avatar
-          variant="success"
+          variant="info"
           icon="brightness-alt-high"
           class="mr-3"
         ></b-avatar>
         <span class="mr-auto">Al-maghrib</span>
         <h2>{{ prayers.maghrib }}</h2>
       </b-list-group-item>
-      <b-list-group-item class="d-flex align-items-center">
+      <b-list-group-item
+        :variant="nextPrayer === 'Isha' ? 'dark' : ''"
+        class="d-flex align-items-center"
+      >
         <b-avatar
-          variant="success"
+          variant="info"
           icon="brightness-low-fill"
           class="mr-3"
         ></b-avatar>
@@ -77,6 +87,7 @@ export default {
         maghrib: "",
         isha: "",
       },
+      nextPrayer: "",
     };
   },
   created() {
@@ -91,6 +102,8 @@ export default {
           `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${city}&country=${country}&method=8`
         )
         .then((res) => {
+          this.$emit("apiResponse", res);
+          this.getTodaysPrayerTimes({ ...res });
           this.prayers.fajr = res["data"]["data"]["timings"].Fajr;
           this.prayers.sunrise = res["data"]["data"]["timings"].Sunrise;
           this.prayers.duhr = res["data"]["data"]["timings"].Dhuhr;
@@ -103,10 +116,41 @@ export default {
           console.log(err);
           this.$emit("failedFetching", err);
           setTimeout(() => {
-            this.$emit("failedFetching", err);
+            // this.$emit("failedFetching", err);
             this.fetchData(this.city, this.country);
           }, 5000);
         });
+    },
+    getTodaysPrayerTimes({
+      data: {
+        data: { timings },
+      },
+    }) {
+      delete timings.Imsak;
+      delete timings.Midnight;
+      delete timings.Sunrise;
+      delete timings.Sunset;
+      const timingsTolistOrdered = [
+        { salat: "Fajr", time: timings.Fajr },
+        { salat: "Dhuhr", time: timings.Dhuhr },
+        { salat: "Asr", time: timings.Asr },
+        { salat: "Maghrib", time: timings.Maghrib },
+        { salat: "Isha", time: timings.Isha },
+      ];
+      console.log(timingsTolistOrdered);
+      const nextPrayers = [];
+      timingsTolistOrdered.forEach((el) => {
+        const [hours, minute] = el.time.split(":");
+        // console.log(hours, minute);
+        if (
+          new Date().getHours() <= parseInt(hours) &&
+          new Date().getMinutes() <= parseInt(minute)
+        ) {
+          nextPrayers.push(el.salat);
+          console.log("next prayer is " + el.salat);
+        }
+      });
+      this.nextPrayer = nextPrayers[0];
     },
   },
   watch: {
