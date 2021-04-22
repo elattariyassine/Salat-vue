@@ -1,19 +1,19 @@
 <template>
   <div id="main">
-    <!-- <NavBar /> -->
-    <!-- <hr /> -->
+    <OpeningModal />
+    <div class="ribbon ribbon-top-right"><span>Github</span></div>
     <Main />
   </div>
 </template>
 
 <script>
-// import NavBar from "./components/Navbar";
 import Main from "./components/Main";
+import OpeningModal from "./components/OpeningModal";
 
 export default {
   components: {
-    // NavBar,
     Main,
+    OpeningModal,
   },
 };
 </script>

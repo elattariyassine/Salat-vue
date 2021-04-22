@@ -88,7 +88,7 @@ export default {
       this.isLoading = true;
       axios
         .get(
-          `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${city}&country=${country}&method=8`
+          `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${city}&country=${country}&method=3`
         )
         .then((res) => {
           this.getTodaysPrayerTimes({ ...res });
