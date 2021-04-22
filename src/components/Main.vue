@@ -26,17 +26,19 @@
           width="100%"
         ></b-skeleton>
         <!-- </b-card> -->
-        <b-alert show variant="info"
-          >{{ hijriDate }} -
-          <h5>
-            <b-badge
-              v-b-tooltip.hover
-              title="Next prayer is also shown as the active item in the list below"
-              variant="warning"
-              >Next Prayer is {{ nextPrayer }}
-            </b-badge>
-          </h5>
-        </b-alert>
+        <div id="justToCenterTheAlert">
+          <b-alert v-if="isLoading" show variant="info">
+            {{ hijriDate }} -
+            <h5>
+              <b-badge
+                v-b-tooltip.hover
+                title="Next prayer is also shown as the active item in the list below"
+                variant="warning"
+                >Next Prayer is {{ nextPrayer }}
+              </b-badge>
+            </h5>
+          </b-alert>
+        </div>
         <!-- </b-row> -->
         <hr />
         <RetryAlert :retry="retryRequest" />
@@ -114,11 +116,6 @@ export default {
       this.hijriDate = `${response["data"]["data"]["date"]["gregorian"]["weekday"].en}, ${response["data"]["data"]["date"]["hijri"].day} ${response["data"]["data"]["date"]["hijri"].month.en} ${response["data"]["data"]["date"]["hijri"].year}, ${response["data"]["data"]["date"].readable}`;
       this.isLoading = isLoading;
       this.nextPrayer = nextPrayer;
-      // console.log("==== " + res);
-      // this.hijriDate =
-      //   response["data"]["data"]["date"]["hijri"].date +
-      //   " - " +
-      //   response["data"]["data"]["date"]["hijri"].month.en;
     },
   },
   computed: {
@@ -135,3 +132,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#justToCenterTheAlert {
+  text-align: center;
+}
+</style>

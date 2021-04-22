@@ -85,14 +85,12 @@ export default {
   },
   methods: {
     fetchData(city, country) {
-      console.log("trying 1 it might work...");
       this.isLoading = true;
       axios
         .get(
           `${process.env.VUE_APP_ROOT_API}timingsByCity?city=${city}&country=${country}&method=8`
         )
         .then((res) => {
-          console.log(this.nextPrayer + "H§§§§§§§§§§§§§§§§§§§§§§§§§§§§§!!");
           this.getTodaysPrayerTimes({ ...res });
           this.$emit("apiResponse", res, this.isLoading, this.nextPrayer);
           this.prayers.fajr = res["data"]["data"]["timings"].Fajr;
@@ -116,6 +114,7 @@ export default {
         data: { timings },
       },
     }) {
+      console.warn("inside methode that gives next prayer");
       delete timings.Imsak;
       delete timings.Midnight;
       delete timings.Sunrise;
@@ -127,23 +126,21 @@ export default {
         { salat: "Maghrib", time: timings.Maghrib },
         { salat: "Isha", time: timings.Isha },
       ];
-      console.log(timingsTolistOrdered);
       const nextPrayers = [];
       timingsTolistOrdered.forEach((el) => {
         const [hours, minute] = el.time.split(":");
-        console.log(hours, minute);
-        if (
-          new Date().getHours() <= parseInt(hours) &&
-          new Date().getMinutes() <= parseInt(minute)
-        ) {
+        if (new Date().getHours() < parseInt(hours)) {
           nextPrayers.push(el.salat);
           console.log("next prayer is " + el.salat);
+        } else if (new Date().getHours() == parseInt(hours)) {
+          if (new Date().getMinutes() <= parseInt(minute)) {
+            nextPrayers.push(el.salat);
+          }
         }
       });
+      if (nextPrayers[0] == undefined) nextPrayers.push("Fajr");
+      console.warn(nextPrayers);
       this.nextPrayer = nextPrayers[0];
-      if (nextPrayers[0] == undefined) {
-        this.nextPrayer = "Fajr";
-      }
     },
   },
   watch: {
