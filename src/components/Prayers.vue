@@ -101,10 +101,8 @@ export default {
           this.isLoading = false;
         })
         .catch((err) => {
-          console.log(err);
           this.$emit("failedFetching", err);
           setTimeout(() => {
-            // this.$emit("failedFetching", err);
             this.fetchData(this.city, this.country);
           }, 5000);
         });
@@ -114,7 +112,6 @@ export default {
         data: { timings },
       },
     }) {
-      console.warn("inside methode that gives next prayer");
       delete timings.Imsak;
       delete timings.Midnight;
       delete timings.Sunrise;
@@ -139,7 +136,6 @@ export default {
         }
       });
       if (nextPrayers[0] == undefined) nextPrayers.push("Fajr");
-      console.warn(nextPrayers);
       this.nextPrayer = nextPrayers[0];
     },
   },

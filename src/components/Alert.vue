@@ -42,7 +42,6 @@ export default {
   },
   watch: {
     retry() {
-      console.log("IM INSIDE RETRY IN ALERT !!!!!!!!!!");
       this.showAlert();
     },
   },

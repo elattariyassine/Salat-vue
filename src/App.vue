@@ -1,7 +1,7 @@
 <template>
   <div id="main">
     <OpeningModal />
-    <div class="ribbon ribbon-top-right"><span>Github</span></div>
+    <Ribbon />
     <Main />
   </div>
 </template>
@@ -9,11 +9,13 @@
 <script>
 import Main from "./components/Main";
 import OpeningModal from "./components/OpeningModal";
+import Ribbon from "./components/Ribbon";
 
 export default {
   components: {
     Main,
     OpeningModal,
+    Ribbon,
   },
 };
 </script>

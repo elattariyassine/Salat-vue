@@ -108,8 +108,8 @@ export default {
     HandleCity(city) {
       this.selectedCity = city;
     },
-    retryFetching(error) {
-      console.log("this is error in parent " + error);
+    retryFetching() {
+      //here i receive the error message as a paramer but because i dont need it i remove it but it can be added
       this.retryRequest = !this.retryRequest;
     },
     loadApiResponseFromChild(response, isLoading, nextPrayer) {
