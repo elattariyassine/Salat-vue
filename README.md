@@ -4,4 +4,4 @@ Prayers time web app using vuejs, it supports almost all countries and cities an
 
 ## ScreenShot
 
-![Salat-Vue](https://github.com/ELATTARIYassine/Salat-vue/tree/main/media/salat-vue.png)
+![Salat-Vue](https://github.com/ELATTARIYassine/Salat-vue/blob/main/media/salat-vue.png)
