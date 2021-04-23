@@ -85,6 +85,7 @@ export default {
   created() {
     this.selectedCountryFullName = this.GetCountryFullNameByCode;
     this.loadCities();
+    this.selectedCity = "Youssoufia";
   },
   methods: {
     HandleSelectedCountry() {

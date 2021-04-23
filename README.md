@@ -1,24 +1,7 @@
-# salat-vue
+# Salat-vue
 
-## Project setup
-```
-npm install
-```
+Prayers time web app using vuejs, it supports almost all countries and cities and it uses Muslim World League as calculation method (Methods identify various schools of thought about how to compute the timings).
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## ScreenShot
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![Salat-Vue](https://github.com/ELATTARIYassine/Salat-vue/tree/main/media/salat-vue.png)
