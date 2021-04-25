@@ -4,18 +4,18 @@
       <b-col md="6" offset-md="3">
         <b-row>
           <b-col md="6">
-            <b-form-select
+            <model-select
               v-model="selectedCountryByCode"
-              @change="HandleSelectedCountry"
+              @input="HandleSelectedCountry"
               :options="options"
-            ></b-form-select>
+            ></model-select>
           </b-col>
           <b-col md="6">
-            <b-form-select
-              @change="HandleCity"
+            <model-select
+              @input="HandleCity"
               v-model="selectedCity"
               :options="citiesForGivenCountry"
-            ></b-form-select>
+            ></model-select>
           </b-col>
         </b-row>
         <hr />
@@ -62,11 +62,13 @@ import * as data from "../helpers/countries";
 import cities from "../helpers/cities.json";
 import Prayers from "./Prayers";
 import RetryAlert from "./Alert";
+import { ModelSelect } from 'vue-search-select'
 
 export default {
   components: {
     Prayers,
     RetryAlert,
+    ModelSelect
   },
   citiesJson: cities,
   data() {
