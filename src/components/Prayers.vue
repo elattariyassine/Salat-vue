@@ -137,6 +137,10 @@ export default {
       });
       if (nextPrayers[0] == undefined) nextPrayers.push("Fajr");
       this.nextPrayer = nextPrayers[0];
+      this.$emit(
+        "currentPrayerNameAndTime",
+        timingsTolistOrdered.find((salat) => this.nextPrayer === salat.salat)
+      );
     },
   },
   watch: {

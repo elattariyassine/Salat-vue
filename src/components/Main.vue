@@ -37,6 +37,13 @@
                 >Next Prayer is {{ nextPrayer }}
               </b-badge>
             </h5>
+            <hr />
+            <vue-countdown :time="time" v-slot="{ hours, minutes, seconds }">
+              Time Remaining for next prayer： -
+              <span v-if="hours != 0">{{ hours }} hours, </span>
+              <span v-if="minutes != 0">{{ minutes }} minutes, </span>
+              {{ seconds }} seconds.
+            </vue-countdown>
           </b-alert>
         </div>
         <!-- </b-row> -->
@@ -47,6 +54,7 @@
             <Prayers
               @failedFetching="retryFetching"
               @apiResponse="loadApiResponseFromChild"
+              @currentPrayerNameAndTime="feedCountDown"
               :country="selectedCountryFullName"
               :city="selectedCity"
             />
@@ -62,13 +70,13 @@ import * as data from "../helpers/countries";
 import cities from "../helpers/cities.json";
 import Prayers from "./Prayers";
 import RetryAlert from "./Alert";
-import { ModelSelect } from 'vue-search-select'
+import { ModelSelect } from "vue-search-select";
 
 export default {
   components: {
     Prayers,
     RetryAlert,
-    ModelSelect
+    ModelSelect,
   },
   citiesJson: cities,
   data() {
@@ -82,6 +90,7 @@ export default {
       hijriDate: "",
       isLoading: false,
       nextPrayer: "",
+      leftMinutesToNextPrayer: 0,
     };
   },
   created() {
@@ -120,6 +129,18 @@ export default {
       this.isLoading = isLoading;
       this.nextPrayer = nextPrayer;
     },
+    feedCountDown(nextSalat) {
+      const [hours, minutes] = nextSalat.time.split(":");
+      const nextPrayerTime = new Date();
+      nextPrayerTime.setHours(hours);
+      nextPrayerTime.setMinutes(minutes);
+      const dateNow = new Date();
+
+      let diff = (nextPrayerTime.getTime() - dateNow.getTime()) / 1000;
+      diff /= 60;
+      this.leftMinutesToNextPrayer = Math.abs(Math.round(diff));
+      // console.warn(res);
+    },
   },
   computed: {
     GetCountryFullNameByCode() {
@@ -131,6 +152,9 @@ export default {
       return this.$options.citiesJson.filter(
         (obj) => obj.country === this.selectedCountryFullName
       );
+    },
+    time() {
+      return this.leftMinutesToNextPrayer * 60 * 1000;
     },
   },
 };
