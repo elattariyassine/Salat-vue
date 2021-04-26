@@ -38,7 +38,11 @@
               </b-badge>
             </h5>
             <hr />
-            <vue-countdown :time="time" v-slot="{ hours, minutes, seconds }">
+            <vue-countdown
+              @end="countdownFinished"
+              :time="time"
+              v-slot="{ hours, minutes, seconds }"
+            >
               Time Remaining for next prayer： -
               <span v-if="hours != 0">{{ hours }} hours, </span>
               <span v-if="minutes != 0">{{ minutes }} minutes, </span>
@@ -91,6 +95,7 @@ export default {
       isLoading: false,
       nextPrayer: "",
       leftMinutesToNextPrayer: 0,
+      sendRequestAgainWhenCountDownFinished: false,
     };
   },
   created() {
@@ -139,7 +144,9 @@ export default {
       let diff = (nextPrayerTime.getTime() - dateNow.getTime()) / 1000;
       diff /= 60;
       this.leftMinutesToNextPrayer = Math.abs(Math.round(diff));
-      // console.warn(res);
+    },
+    countdownFinished() {
+      window.location.reload();
     },
   },
   computed: {
